@@ -1,0 +1,12 @@
+.DS_Store
+node_modules/
+dist/
+.vite/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+scratch/
+game_test*.png
+screenshot_*.png
+

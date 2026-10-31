@@ -1,0 +1,1330 @@
+@import url('https://fonts.googleapis.com/css2?family=Orbitron:wght@700;900&display=swap');
+
+/* --- Reseteo y Base Arcade 1999 --- */
+.arcade-hud-root {
+  position: fixed;
+  inset: 0;
+  pointer-events: none;
+  user-select: none;
+  font-family: 'Orbitron', 'Courier New', monospace, sans-serif;
+  color: #ffffff;
+  z-index: 100;
+  overflow: hidden;
+}
+
+.arcade-hud-root * {
+  box-sizing: border-box;
+}
+
+/* --- Estilos Comunes --- */
+.arcade-label-cyan {
+  color: #00ffff;
+  font-size: 15px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  text-shadow: 2px 2px 0px #000, 0 0 8px rgba(0, 255, 255, 0.6);
+}
+
+.arcade-metallic-panel {
+  background: rgba(15, 25, 85, 0.88);
+  border: 3px solid #6b7280;
+  border-radius: 10px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.25), 0 8px 24px rgba(0, 0, 0, 0.8);
+  backdrop-filter: blur(6px);
+}
+
+/* ==========================================================================
+   1. ESQUINA SUPERIOR IZQUIERDA (Lap + Caja de Arma 72x72)
+   ========================================================================== */
+#hud-top-left {
+  position: absolute;
+  top: 18px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.hud-lap-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.1;
+}
+
+.hud-lap-text {
+  font-size: 42px;
+  font-weight: 900;
+  color: #ffffff;
+  text-shadow: 3px 3px 0px #000, 0 0 12px rgba(255, 255, 255, 0.5);
+  font-style: italic;
+}
+
+/* Recuadro de arma 72px x 72px con mirilla interna y borde metálico */
+.hud-weapon-box {
+  width: 72px;
+  height: 72px;
+  position: relative;
+  background: rgba(10, 15, 40, 0.85);
+  border: 3px solid #6b7280;
+  border-radius: 12px;
+  box-shadow: inset 0 0 8px rgba(0, 255, 255, 0.2), 0 6px 18px rgba(0, 0, 0, 0.8);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+/* Mirilla interna / Retícula */
+.hud-weapon-box::before,
+.hud-weapon-box::after {
+  content: '';
+  position: absolute;
+  pointer-events: none;
+}
+.hud-weapon-box::before {
+  inset: 6px;
+  border: 1px dashed rgba(0, 255, 255, 0.35);
+  border-radius: 6px;
+}
+.hud-weapon-box::after {
+  width: 14px;
+  height: 14px;
+  border-top: 1px solid rgba(0, 255, 255, 0.5);
+  border-bottom: 1px solid rgba(0, 255, 255, 0.5);
+}
+
+.hud-weapon-icon {
+  font-size: 34px;
+  filter: drop-shadow(0 0 6px rgba(255, 255, 255, 0.8));
+  transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+.hud-weapon-charges {
+  position: absolute;
+  bottom: 4px;
+  right: 6px;
+  font-size: 18px;
+  font-weight: 900;
+  color: #facc15;
+  text-shadow: 2px 2px 0px #000, 0 0 6px rgba(250, 204, 21, 0.8);
+}
+
+/* ==========================================================================
+   2. ESQUINA SUPERIOR DERECHA (4 Bloques Verticales de Tiempo)
+   ========================================================================== */
+#hud-top-right {
+  position: absolute;
+  top: 18px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  text-align: right;
+  align-items: flex-end;
+}
+
+.hud-time-block {
+  display: flex;
+  flex-direction: column;
+  line-height: 1.15;
+}
+
+.hud-time-block .time-label {
+  color: #00e5ff;
+  font-size: 13px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0px #000, 0 0 6px rgba(0, 229, 255, 0.6);
+}
+
+.hud-time-block .time-value {
+  color: #ffffff;
+  font-size: 21px;
+  font-weight: 900;
+  font-family: 'Orbitron', 'Courier New', monospace;
+  letter-spacing: 1px;
+  text-shadow: 2px 2px 0px #000, 0 0 8px rgba(255, 255, 255, 0.4);
+}
+
+/* ==========================================================================
+   3. ESQUINA INFERIOR IZQUIERDA (Posición, Flecha Guía y Distancias)
+   ========================================================================== */
+#hud-bottom-left {
+  position: absolute;
+  bottom: 20px;
+  left: 20px;
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+}
+
+.hud-pos-row {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+}
+
+.hud-rank-large {
+  font-size: 52px;
+  font-weight: 900;
+  font-style: italic;
+  line-height: 1;
+  text-shadow: 3px 3px 0px #000, 0 0 12px rgba(255, 255, 255, 0.5);
+}
+
+.hud-rank-large .rank-num {
+  color: #ffffff;
+}
+
+.hud-rank-large .rank-suf {
+  color: #00ffff;
+  font-size: 32px;
+  margin-left: 2px;
+}
+
+/* Flecha roja de orientación hacia el siguiente waypoint */
+.hud-waypoint-arrow-container {
+  width: 44px;
+  height: 44px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.hud-waypoint-arrow {
+  width: 32px;
+  height: 38px;
+  transform-origin: center center;
+  filter: drop-shadow(0 0 8px rgba(239, 68, 68, 0.8));
+  transition: transform 0.08s ease-out;
+}
+
+/* Caja de distancias en metros */
+.hud-distance-box {
+  padding: 8px 14px;
+  min-width: 210px;
+  display: flex;
+  flex-direction: column;
+  gap: 4px;
+  font-size: 13px;
+  font-weight: 900;
+}
+
+.hud-distance-row {
+  display: flex;
+  align-items: baseline;
+  gap: 10px;
+}
+
+.hud-distance-row .dist-ahead {
+  color: #22c55e;
+  font-family: 'Orbitron', monospace;
+  text-shadow: 1px 1px 0px #000;
+}
+
+.hud-distance-row .dist-behind {
+  color: #ef4444;
+  font-family: 'Orbitron', monospace;
+  text-shadow: 1px 1px 0px #000;
+}
+
+.hud-distance-row .racer-name {
+  color: #ffffff;
+  text-shadow: 1px 1px 0px #000;
+  text-transform: uppercase;
+}
+
+/* ==========================================================================
+   4. ESQUINA INFERIOR DERECHA (Velocímetro LED en Arco)
+   ========================================================================== */
+#hud-bottom-right {
+  position: absolute;
+  bottom: 20px;
+  right: 20px;
+  display: flex;
+  flex-direction: column;
+  align-items: flex-end;
+}
+
+.hud-speedometer-container {
+  position: relative;
+  width: 175px;
+  height: 85px;
+}
+
+/* Cada esfera LED del arco */
+.hud-led {
+  position: absolute;
+  width: 15px;
+  height: 15px;
+  border-radius: 50%;
+  border: 1px solid #1f2937;
+  transition: background-color 0.08s, box-shadow 0.08s;
+}
+
+/* Estados apagados de los LEDs */
+.hud-led.led-red { background: #3f1010; }
+.hud-led.led-yellow { background: #3d3509; }
+.hud-led.led-green { background: #0c3316; }
+
+/* Estados iluminados de los LEDs */
+.hud-led.led-red.lit {
+  background: #ef4444;
+  box-shadow: 0 0 12px #ef4444, inset 0 0 4px #ffffff;
+}
+.hud-led.led-yellow.lit {
+  background: #facc15;
+  box-shadow: 0 0 12px #facc15, inset 0 0 4px #ffffff;
+}
+.hud-led.led-green.lit {
+  background: #22c55e;
+  box-shadow: 0 0 12px #22c55e, inset 0 0 4px #ffffff;
+}
+
+.hud-speed-label {
+  display: flex;
+  align-items: baseline;
+  gap: 5px;
+  margin-top: 2px;
+}
+
+.hud-speed-num {
+  font-size: 34px;
+  font-weight: 900;
+  color: #ffffff;
+  font-style: italic;
+  text-shadow: 2px 2px 0px #000, 0 0 8px rgba(255, 255, 255, 0.5);
+  font-family: 'Orbitron', monospace;
+}
+
+.hud-speed-unit {
+  font-size: 15px;
+  font-weight: 900;
+  color: #00ffff;
+  text-transform: uppercase;
+  letter-spacing: 1px;
+  text-shadow: 1px 1px 0px #000, 0 0 6px rgba(0, 255, 255, 0.6);
+}
+
+/* ==========================================================================
+   5. MENÚ PRINCIPAL Y PANTALLA FINAL
+   ========================================================================== */
+.arcade-overlay {
+  position: fixed;
+  inset: 0;
+  background: radial-gradient(circle, rgba(15, 23, 42, 0.88) 0%, rgba(2, 6, 23, 0.98) 100%);
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  z-index: 200;
+  pointer-events: auto;
+  user-select: none;
+  font-family: 'Orbitron', 'Courier New', monospace;
+  color: #ffffff;
+  padding: 24px;
+}
+
+.arcade-title {
+  font-size: 48px;
+  font-weight: 900;
+  font-style: italic;
+  letter-spacing: 3px;
+  background: linear-gradient(180deg, #ffffff 0%, #00e5ff 50%, #0284c7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  filter: drop-shadow(0 4px 12px rgba(0, 229, 255, 0.8));
+  margin-bottom: 2px;
+  text-align: center;
+}
+
+.arcade-subtitle {
+  font-size: 14px;
+  font-weight: 700;
+  color: #facc15;
+  letter-spacing: 4px;
+  text-transform: uppercase;
+  margin-bottom: 24px;
+  text-shadow: 0 0 8px rgba(250, 204, 21, 0.6);
+}
+
+.menu-selection-container {
+  display: flex;
+  gap: 28px;
+  max-width: 950px;
+  width: 100%;
+  margin-bottom: 24px;
+}
+
+.menu-section {
+  flex: 1;
+  background: rgba(15, 25, 85, 0.85);
+  border: 3px solid #6b7280;
+  border-radius: 12px;
+  padding: 16px;
+  box-shadow: inset 0 0 10px rgba(255, 255, 255, 0.15), 0 8px 24px rgba(0, 0, 0, 0.7);
+}
+
+.menu-section-title {
+  color: #00ffff;
+  font-size: 14px;
+  font-weight: 900;
+  text-transform: uppercase;
+  letter-spacing: 1.5px;
+  margin-bottom: 12px;
+  border-bottom: 1px solid rgba(0, 255, 255, 0.25);
+  padding-bottom: 4px;
+}
+
+.car-cards-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 10px;
+}
+
+.car-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #4b5563;
+  border-radius: 8px;
+  padding: 10px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.car-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.car-card.selected {
+  border-color: #00ffff;
+  background: rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.4);
+}
+
+.car-name {
+  font-size: 12px;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+
+.stat-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: 9px;
+  margin-bottom: 3px;
+  color: #94a3b8;
+}
+
+.stat-bar-track {
+  width: 55px;
+  height: 6px;
+  background: #1f2937;
+  border-radius: 3px;
+  overflow: hidden;
+}
+
+.stat-bar-fill {
+  height: 100%;
+  background: #00ffff;
+}
+
+.map-card {
+  background: rgba(0, 0, 0, 0.4);
+  border: 2px solid #4b5563;
+  border-radius: 8px;
+  padding: 14px;
+  cursor: pointer;
+  margin-bottom: 10px;
+  transition: all 0.15s ease;
+}
+
+.map-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.map-card.selected {
+  border-color: #00ffff;
+  background: rgba(0, 255, 255, 0.15);
+  box-shadow: 0 0 14px rgba(0, 255, 255, 0.4);
+}
+
+.map-card-name {
+  font-size: 14px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 4px;
+}
+
+.map-card-desc {
+  font-size: 10px;
+  color: #94a3b8;
+}
+
+.arcade-btn {
+  background: linear-gradient(180deg, #0284c7 0%, #0369a1 100%);
+  border: 3px solid #38bdf8;
+  border-radius: 8px;
+  padding: 14px 42px;
+  font-size: 18px;
+  font-weight: 900;
+  font-family: 'Orbitron', monospace;
+  color: #ffffff;
+  letter-spacing: 2px;
+  cursor: pointer;
+  text-shadow: 1px 1px 0px #000;
+  box-shadow: 0 0 18px rgba(2, 132, 199, 0.6), inset 0 0 10px rgba(255, 255, 255, 0.3);
+  transition: all 0.15s ease;
+  pointer-events: auto;
+}
+
+.arcade-btn:hover {
+  background: linear-gradient(180deg, #0369a1 0%, #075985 100%);
+  transform: scale(1.04);
+  box-shadow: 0 0 24px rgba(0, 229, 255, 0.8);
+}
+
+/* Tabla de Posiciones Finales */
+.results-table {
+  width: 100%;
+  max-width: 600px;
+  border-collapse: collapse;
+  margin-bottom: 20px;
+}
+
+.results-table th {
+  color: #00ffff;
+  font-size: 12px;
+  padding: 8px;
+  border-bottom: 2px solid #38bdf8;
+  text-align: left;
+}
+
+.results-table td {
+  padding: 8px;
+  font-size: 13px;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+}
+
+.results-table tr.player-row {
+  background: rgba(0, 255, 255, 0.18);
+  font-weight: 900;
+}
+
+/* ==========================================================================
+   REFORMA 3: SISTEMA DE MENÚS COMERCIAL (MenuSystem.js, GarageScene, Settings)
+   ========================================================================== */
+.menu-system-root {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  pointer-events: none;
+  user-select: none;
+  font-family: 'Orbitron', 'Courier New', monospace, sans-serif;
+  color: #ffffff;
+}
+
+.menu-system-root * {
+  box-sizing: border-box;
+}
+
+.menu-screen {
+  position: absolute;
+  inset: 0;
+  display: none;
+  opacity: 0;
+  pointer-events: none;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  padding: 24px;
+  background: rgba(10, 15, 25, 0.45);
+  backdrop-filter: blur(4px);
+  -webkit-backdrop-filter: blur(4px);
+  transition: opacity 0.2s ease;
+}
+
+.menu-screen.active {
+  display: flex;
+  opacity: 1;
+  pointer-events: auto;
+  animation: menuFadeIn 0.25s cubic-bezier(0.16, 1, 0.3, 1) forwards;
+}
+
+@keyframes menuFadeIn {
+  from { opacity: 0; transform: scale(0.98); }
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* --- Pantalla A: Menú Principal (Home) --- */
+.menu-header-banner {
+  text-align: center;
+  margin-bottom: 28px;
+}
+
+.arcade-main-logo {
+  font-size: 58px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fde047;
+  letter-spacing: 3px;
+  text-shadow: 0 0 20px rgba(253, 224, 71, 0.8), 3px 3px 0px #0284c7, 6px 6px 0px #090d16;
+  animation: pulseLogo 2.5s infinite alternate ease-in-out;
+}
+
+@keyframes pulseLogo {
+  from { filter: drop-shadow(0 0 8px rgba(56, 189, 248, 0.6)); }
+  to { filter: drop-shadow(0 0 24px rgba(253, 224, 71, 0.9)); }
+}
+
+.arcade-edition-tag {
+  color: #00f0ff;
+  font-size: 14px;
+  font-weight: 700;
+  letter-spacing: 2px;
+  margin-top: 6px;
+  text-shadow: 1px 1px 0px #000;
+}
+
+.main-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  width: 100%;
+  max-width: 580px;
+}
+
+.menu-pill-btn {
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  background: linear-gradient(90deg, #111827 0%, #1f2937 100%);
+  border: 1px solid #374151;
+  border-left: 4px solid #f59e0b;
+  border-radius: 0px;
+  padding: 14px 22px;
+  cursor: pointer;
+  color: #ffffff;
+  text-align: left;
+  transition: all 0.15s ease;
+  box-shadow: 0 6px 16px rgba(0, 0, 0, 0.7);
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  text-transform: uppercase;
+}
+
+.menu-pill-btn:hover {
+  border-color: #00f0ff;
+  border-left: 6px solid #00f0ff;
+  background: linear-gradient(90deg, rgba(0, 240, 255, 0.25) 0%, #111827 100%);
+  transform: translateX(8px);
+  box-shadow: 0 0 22px rgba(0, 240, 255, 0.5);
+}
+
+.menu-pill-btn .btn-tag {
+  font-size: 14px;
+  font-weight: 900;
+  color: #00f0ff;
+  letter-spacing: 1px;
+}
+
+.menu-pill-btn .btn-texts {
+  display: flex;
+  flex-direction: column;
+}
+
+.menu-pill-btn .btn-title {
+  font-size: 16px;
+  font-weight: 900;
+  letter-spacing: 1.5px;
+  color: #ffffff;
+}
+
+.menu-pill-btn:hover .btn-title {
+  color: #00f0ff;
+}
+
+.menu-pill-btn .btn-sub {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 500;
+  letter-spacing: 1px;
+}
+
+.menu-footer-hint {
+  margin-top: 28px;
+  font-size: 11px;
+  color: #94a3b8;
+  letter-spacing: 1px;
+  text-align: center;
+}
+
+/* --- Barra Superior Común de Pantallas --- */
+.screen-top-bar {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 100%;
+  max-width: 1100px;
+  margin-bottom: 20px;
+}
+
+.screen-title {
+  font-size: 24px;
+  font-weight: 900;
+  font-style: italic;
+  color: #00f0ff;
+  letter-spacing: 2px;
+  text-shadow: 2px 2px 0px #000, 0 0 10px rgba(0, 240, 255, 0.5);
+}
+
+.nav-back-btn {
+  background: #111827;
+  border: 1px solid #475569;
+  border-left: 3px solid #ef4444;
+  color: #e2e8f0;
+  border-radius: 0px;
+  padding: 10px 20px;
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  font-weight: 700;
+  font-size: 13px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.nav-back-btn:hover {
+  border-color: #ef4444;
+  color: #ffffff;
+  background: rgba(239, 68, 68, 0.25);
+  transform: translateX(-4px);
+}
+
+.nav-next-btn, .nav-start-btn {
+  background: #f59e0b;
+  border: 2px solid #fbbf24;
+  color: #000000;
+  border-radius: 0px;
+  padding: 12px 26px;
+  font-family: 'Orbitron', 'Impact', sans-serif;
+  font-weight: 900;
+  font-size: 15px;
+  letter-spacing: 1.5px;
+  cursor: pointer;
+  box-shadow: 0 0 16px rgba(245, 158, 11, 0.5);
+  transition: all 0.15s ease;
+  text-transform: uppercase;
+}
+
+.nav-next-btn:hover, .nav-start-btn:hover {
+  transform: scale(1.04);
+  box-shadow: 0 0 24px rgba(245, 158, 11, 0.85);
+  background: #fbbf24;
+}
+
+/* --- Pantalla B: Garaje 3D (Dos Columnas) --- */
+.garage-two-columns {
+  display: flex;
+  gap: 28px;
+  width: 100%;
+  max-width: 1100px;
+  align-items: stretch;
+}
+
+.garage-car-picker-card, .garage-specs-card {
+  flex: 1;
+  background: rgba(17, 24, 39, 0.90);
+  border: 1px solid #374151;
+  border-radius: 0px;
+  padding: 22px;
+  box-shadow: inset 0 0 12px rgba(255, 255, 255, 0.05), 0 10px 28px rgba(0, 0, 0, 0.85);
+}
+
+.car-nav-row {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 16px;
+}
+
+.arrow-btn {
+  background: #1e293b;
+  border: 2px solid #38bdf8;
+  color: #38bdf8;
+  font-size: 20px;
+  width: 44px;
+  height: 44px;
+  border-radius: 8px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.arrow-btn:hover {
+  background: #38bdf8;
+  color: #0f172a;
+  transform: scale(1.1);
+}
+
+.car-headline {
+  text-align: center;
+}
+
+.car-picker-name {
+  font-size: 22px;
+  font-weight: 900;
+  color: #fde047;
+  letter-spacing: 1px;
+}
+
+.car-picker-class {
+  font-size: 11px;
+  color: #38bdf8;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-top: 2px;
+}
+
+.car-thumbs-strip {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin-bottom: 20px;
+}
+
+.car-thumb {
+  background: #1e293b;
+  border: 2px solid #475569;
+  border-radius: 6px;
+  padding: 8px 4px;
+  text-align: center;
+  font-size: 11px;
+  font-weight: 700;
+  color: #94a3b8;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.car-thumb:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.car-thumb.selected {
+  border-color: #fde047;
+  background: rgba(253, 224, 71, 0.15);
+  color: #fde047;
+  box-shadow: 0 0 10px rgba(253, 224, 71, 0.4);
+}
+
+.customizer-block {
+  margin-top: 14px;
+}
+
+.custom-title {
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 8px;
+  letter-spacing: 1px;
+}
+
+.color-swatches-row {
+  display: flex;
+  gap: 12px;
+}
+
+.color-swatch {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  border: 2px solid #ffffff;
+  cursor: pointer;
+  transition: all 0.15s ease;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.5);
+}
+
+.color-swatch:hover {
+  transform: scale(1.2);
+}
+
+.color-swatch.selected {
+  transform: scale(1.25);
+  box-shadow: 0 0 14px #ffffff;
+  border-width: 3px;
+}
+
+.dorsal-buttons-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+}
+
+.dorsal-btn {
+  background: #1e293b;
+  border: 2px solid #64748b;
+  color: #e2e8f0;
+  font-size: 12px;
+  font-weight: 900;
+  padding: 6px 12px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  transition: all 0.15s ease;
+}
+
+.dorsal-btn:hover {
+  border-color: #38bdf8;
+}
+
+.dorsal-btn.selected {
+  background: #38bdf8;
+  color: #0f172a;
+  border-color: #38bdf8;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.6);
+}
+
+/* Ficha Técnica Re-Volt */
+.specs-title {
+  font-size: 16px;
+  font-weight: 900;
+  color: #38bdf8;
+  letter-spacing: 1.5px;
+  margin-bottom: 8px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+  padding-bottom: 4px;
+}
+
+.specs-desc {
+  font-size: 12px;
+  color: #cbd5e1;
+  line-height: 1.4;
+  margin-bottom: 20px;
+}
+
+.spec-stat-item {
+  margin-bottom: 14px;
+}
+
+.stat-meta {
+  display: flex;
+  justify-content: space-between;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 4px;
+}
+
+.stat-meta strong {
+  color: #ffffff;
+}
+
+.stat-track {
+  width: 100%;
+  height: 10px;
+  background: #0f172a;
+  border-radius: 5px;
+  overflow: hidden;
+  border: 1px solid #334155;
+}
+
+.stat-fill {
+  height: 100%;
+  transition: width 0.3s ease;
+}
+
+.cyan-fill { background: linear-gradient(90deg, #0284c7, #38bdf8); }
+.yellow-fill { background: linear-gradient(90deg, #d97706, #fde047); }
+.green-fill { background: linear-gradient(90deg, #059669, #34d399); }
+.purple-fill { background: linear-gradient(90deg, #7c3aed, #a78bfa); }
+
+/* --- Pantalla C: Selección de Circuito y Reglas --- */
+.track-selection-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  width: 100%;
+  max-width: 1100px;
+}
+
+.track-select-card {
+  background: rgba(15, 23, 42, 0.88);
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 18px;
+  cursor: pointer;
+  margin-bottom: 14px;
+  transition: all 0.2s ease;
+}
+
+.track-select-card:hover {
+  border-color: #38bdf8;
+  transform: translateY(-2px);
+}
+
+.track-select-card.selected {
+  border-color: #fde047;
+  background: rgba(253, 224, 71, 0.12);
+  box-shadow: 0 0 18px rgba(253, 224, 71, 0.35);
+}
+
+.track-card-header {
+  display: flex;
+  justify-content: space-between;
+  font-size: 10px;
+  margin-bottom: 6px;
+}
+
+.track-tag {
+  color: #38bdf8;
+  font-weight: 900;
+  letter-spacing: 1px;
+}
+
+.track-record {
+  color: #fde047;
+  font-weight: 700;
+}
+
+.track-title-text {
+  font-size: 18px;
+  font-weight: 900;
+  color: #ffffff;
+  margin-bottom: 6px;
+}
+
+.track-desc-text {
+  font-size: 11px;
+  color: #94a3b8;
+  line-height: 1.4;
+  margin-bottom: 12px;
+}
+
+.track-stats-row {
+  display: flex;
+  gap: 18px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.track-stats-row strong {
+  color: #38bdf8;
+}
+
+.rules-card-column {
+  background: rgba(15, 23, 42, 0.88);
+  border: 2px solid #334155;
+  border-radius: 12px;
+  padding: 22px;
+}
+
+.rules-header {
+  font-size: 16px;
+  font-weight: 900;
+  color: #38bdf8;
+  letter-spacing: 1.5px;
+  margin-bottom: 18px;
+  border-bottom: 1px solid rgba(56, 189, 248, 0.3);
+  padding-bottom: 4px;
+}
+
+.rule-option-group {
+  margin-bottom: 18px;
+}
+
+.rule-option-group label {
+  display: block;
+  font-size: 11px;
+  color: #94a3b8;
+  font-weight: 700;
+  margin-bottom: 6px;
+  letter-spacing: 1px;
+}
+
+.toggle-buttons-row {
+  display: flex;
+  gap: 8px;
+}
+
+.toggle-btn {
+  flex: 1;
+  background: #1e293b;
+  border: 2px solid #475569;
+  color: #94a3b8;
+  font-size: 12px;
+  font-weight: 700;
+  padding: 8px 10px;
+  border-radius: 6px;
+  cursor: pointer;
+  font-family: 'Orbitron', monospace;
+  transition: all 0.15s ease;
+}
+
+.toggle-btn:hover {
+  border-color: #38bdf8;
+  color: #ffffff;
+}
+
+.toggle-btn.selected {
+  background: #0284c7;
+  border-color: #38bdf8;
+  color: #ffffff;
+  box-shadow: 0 0 10px rgba(56, 189, 248, 0.5);
+}
+
+/* --- Pantalla D: Configuración / Opciones --- */
+.settings-modal-card {
+  width: 100%;
+  max-width: 720px;
+  background: rgba(15, 23, 42, 0.94);
+  border: 2px solid #475569;
+  border-radius: 12px;
+  padding: 24px;
+  box-shadow: 0 12px 36px rgba(0, 0, 0, 0.85);
+}
+
+.settings-tabs-header {
+  display: flex;
+  gap: 12px;
+  border-bottom: 2px solid #334155;
+  margin-bottom: 20px;
+  padding-bottom: 4px;
+}
+
+.settings-tab-btn {
+  background: transparent;
+  border: none;
+  border-bottom: 3px solid transparent;
+  color: #94a3b8;
+  font-family: 'Orbitron', monospace;
+  font-size: 14px;
+  font-weight: 900;
+  padding: 8px 16px;
+  cursor: pointer;
+  letter-spacing: 1px;
+  transition: all 0.15s ease;
+}
+
+.settings-tab-btn:hover {
+  color: #38bdf8;
+}
+
+.settings-tab-btn.active {
+  color: #fde047;
+  border-bottom-color: #fde047;
+}
+
+.settings-tab-pane {
+  display: none;
+}
+
+.settings-tab-pane.active {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.setting-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  padding: 8px 0;
+  border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+}
+
+.setting-label {
+  font-size: 13px;
+  color: #e2e8f0;
+}
+
+.setting-label strong {
+  color: #38bdf8;
+}
+
+.arcade-slider {
+  width: 180px;
+  accent-color: #38bdf8;
+  cursor: pointer;
+}
+
+.action-small-btn {
+  background: #334155;
+  border: 1px solid #64748b;
+  color: #ffffff;
+  padding: 6px 14px;
+  font-size: 11px;
+  font-family: 'Orbitron', monospace;
+  border-radius: 6px;
+  cursor: pointer;
+  transition: all 0.15s ease;
+}
+
+.action-small-btn:hover {
+  border-color: #38bdf8;
+  background: #0284c7;
+}
+
+.controls-guide-table {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 8px;
+  margin-top: 8px;
+  background: #0f172a;
+  padding: 12px;
+  border-radius: 8px;
+}
+
+.guide-row {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 11px;
+  color: #cbd5e1;
+}
+
+.k-key {
+  background: #334155;
+  border: 1px solid #94a3b8;
+  border-radius: 4px;
+  padding: 3px 8px;
+  font-size: 10px;
+  font-weight: 900;
+  color: #fde047;
+  min-width: 32px;
+  text-align: center;
+  box-shadow: 0 2px 0 #1e293b;
+}
+
+/* --- Menú de Pausa (ESC) --- */
+.pause-card {
+  background: rgba(15, 23, 42, 0.94);
+  border: 3px solid #38bdf8;
+  border-radius: 12px;
+  padding: 36px 48px;
+  text-align: center;
+  box-shadow: 0 0 30px rgba(56, 189, 248, 0.4);
+}
+
+.pause-title {
+  font-size: 38px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fde047;
+  letter-spacing: 2px;
+  text-shadow: 0 0 12px rgba(253, 224, 71, 0.6);
+}
+
+.pause-subtitle {
+  font-size: 12px;
+  color: #38bdf8;
+  font-weight: 700;
+  letter-spacing: 1.5px;
+  margin-bottom: 24px;
+}
+
+.pause-buttons-stack {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+  min-width: 280px;
+}
+
+.danger-btn {
+  background: linear-gradient(180deg, #dc2626 0%, #b91c1c 100%) !important;
+  border-color: #f87171 !important;
+}
+
+.danger-btn:hover {
+  background: linear-gradient(180deg, #ef4444 0%, #dc2626 100%) !important;
+  box-shadow: 0 0 20px rgba(239, 68, 68, 0.8) !important;
+}
+
+/* --- Semáforo de Salida (3, 2, 1, ¡GO!) --- */
+.countdown-overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 300;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  pointer-events: none;
+}
+
+.traffic-light-box {
+  display: flex;
+  gap: 16px;
+  background: #0f172a;
+  border: 4px solid #334155;
+  border-radius: 20px;
+  padding: 16px 24px;
+  box-shadow: 0 10px 30px rgba(0, 0, 0, 0.9);
+  margin-bottom: 20px;
+}
+
+.light-bulb {
+  width: 44px;
+  height: 44px;
+  border-radius: 50%;
+  border: 3px solid #1e293b;
+  opacity: 0.25;
+  transition: all 0.1s ease;
+}
+
+.bulb-red { background: #ef4444; }
+.bulb-yellow { background: #eab308; }
+.bulb-green { background: #22c55e; }
+
+.light-bulb.lit {
+  opacity: 1;
+  box-shadow: 0 0 24px currentColor;
+  transform: scale(1.1);
+}
+
+.countdown-digit {
+  font-size: 88px;
+  font-weight: 900;
+  font-style: italic;
+  color: #fde047;
+  text-shadow: 0 0 30px rgba(253, 224, 71, 0.9), 4px 4px 0px #000;
+  animation: countdownPulse 0.4s ease-out;
+}
+
+@keyframes countdownPulse {
+  0% { transform: scale(1.4); opacity: 0; }
+  100% { transform: scale(1); opacity: 1; }
+}
+
+/* --- Minimapa Transparente (Ubicado en lateral izquierdo, despejando 100% el velocímetro) --- */
+.minimap-container {
+  position: absolute;
+  top: 160px;
+  left: 24px;
+  width: 180px;
+  height: 180px;
+  pointer-events: none;
+  z-index: 110;
+}
+
+#minimap-canvas {
+  width: 100%;
+  height: 100%;
+  display: block;
+}
+
+/* --- Campeonato Modal --- */
+.championship-card {
+  background: rgba(15, 23, 42, 0.95);
+  border: 3px solid #fde047;
+  border-radius: 12px;
+  padding: 32px 48px;
+  text-align: center;
+  max-width: 650px;
+  width: 100%;
+  box-shadow: 0 0 36px rgba(253, 224, 71, 0.4);
+}
+
