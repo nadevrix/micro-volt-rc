@@ -45,6 +45,15 @@ container.appendChild(renderer.domElement)
 
 const scene = new THREE.Scene()
 
+// Interceptar rutas de assets para compatibilidad universal (Vercel, GitHub Pages, Localhost)
+THREE.DefaultLoadingManager.setURLModifier((url) => {
+  if (url.startsWith('/assets/') || url.startsWith('/draco/')) {
+    const base = import.meta.env.BASE_URL || './'
+    return (base.endsWith('/') ? base : base + '/') + url.slice(1)
+  }
+  return url
+})
+
 // Cargar HDRI para reflejos realistas de metal y plástico barnizado
 const rgbeLoader = new RGBELoader()
 rgbeLoader.load('/assets/textures/royal_esplanade_1k.hdr', (texture) => {

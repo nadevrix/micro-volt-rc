@@ -7,7 +7,8 @@ import { DEFAULT_CAR_PRESET, CAR_PRESETS } from './vehicles/carPresets.js'
 import { applyBuggyLivery } from './vehicles/BuggyLiveryHelper.js'
 
 const sharedDracoLoader = new DRACOLoader()
-sharedDracoLoader.setDecoderPath('/draco/')
+const baseAssetUrl = import.meta.env.BASE_URL || './'
+sharedDracoLoader.setDecoderPath((baseAssetUrl.endsWith('/') ? baseAssetUrl : baseAssetUrl + '/') + 'draco/')
 
 const sharedWheelScenes = [null, null, null, null]
 const WHEEL_URLS = [

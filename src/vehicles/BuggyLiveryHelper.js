@@ -21,11 +21,13 @@ function loadImage(url) {
 }
 
 async function ensureBaseImages() {
+  const base = import.meta.env.BASE_URL || './'
+  const basePath = base.endsWith('/') ? base : base + '/'
   if (!baseBodyImage) {
-    baseBodyImage = await loadImage('/assets/prebuilt/rc-original/body_color_rd_extracted.jpg')
+    baseBodyImage = await loadImage(`${basePath}assets/prebuilt/rc-original/body_color_rd_extracted.jpg`)
   }
   if (!baseSpoilerImage) {
-    baseSpoilerImage = await loadImage('/assets/prebuilt/rc-original/spoiler_color_extracted.jpg')
+    baseSpoilerImage = await loadImage(`${basePath}assets/prebuilt/rc-original/spoiler_color_extracted.jpg`)
   }
 }
 

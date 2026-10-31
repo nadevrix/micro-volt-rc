@@ -36,7 +36,9 @@ export function ensureColormapLoaded() {
       return
     }
     const img = new Image()
-    img.src = '/assets/packs/car-kit/Models/GLB format/Textures/colormap.png'
+    const base = import.meta.env.BASE_URL || './'
+    const basePath = base.endsWith('/') ? base : base + '/'
+    img.src = `${basePath}assets/packs/car-kit/Models/GLB format/Textures/colormap.png`
     img.onload = () => {
       const canvas = document.createElement('canvas')
       canvas.width = img.width
